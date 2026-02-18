@@ -1,37 +1,132 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orvix AI</title><style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orvix Interface</title>
+
+<style>
     body {
-        margin:0;
+        background: #0a0f1c;
+        color: #00eaff;
         font-family: Arial, Helvetica, sans-serif;
-        background:#0b0f18;
-        color:#e4ecff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
     }
 
     header {
-        background:#111827;
-        padding:20px;
-        text-align:center;
-        font-size:28px;
-        font-weight:bold;
-        letter-spacing:2px;
+        background: #050814;
+        padding: 20px;
+        font-size: 28px;
+        letter-spacing: 2px;
     }
 
-    section {
-        padding:40px;
-        max-width:900px;
-        margin:auto;
+    .container {
+        margin-top: 60px;
     }
 
-    h2 {
-        color:#6aa9ff;
+    button {
+        background: #00eaff;
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
     }
 
-    .card {
-        background:#141b2d;
-        padding:20px;
+    button:hover {
+        background: #00bcd4;
+    }
+
+    #log {
+        margin-top: 30px;
+        font-size: 18px;
+        color: #ffffff;
+    }
+</style>
+</head>
+
+<body>
+
+<header>ORVIX AI CONTROL</header>
+
+<div class="container">
+    <button onclick="startListening()">Activate Voice</button>
+    <div id="log">Status: Idle</div>
+</div>
+
+<script>
+/*
+  Combined Voice Engine
+  Uses Web Speech API built into browser
+*/
+
+let recognition;
+
+function initVoice() {
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        document.getElementById("log").innerText =
+            "Speech recognition not supported";
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        document.getElementById("log").innerText = "Listening...";
+    };
+
+    recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        document.getElementById("log").innerText =
+            "You said: " + text;
+
+        processCommand(text.toLowerCase());
+    };
+
+    recognition.onerror = () => {
+        document.getElementById("log").innerText = "Error occurred";
+    };
+}
+
+function startListening() {
+    if (!recognition) initVoice();
+    recognition.start();
+}
+
+function speak(msg) {
+    const utter = new SpeechSynthesisUtterance(msg);
+    speechSynthesis.speak(utter);
+}
+
+function processCommand(cmd) {
+
+    // Example command logic (expand later)
+    if (cmd.includes("hello")) {
+        speak("Hello. Orvix online.");
+    }
+    else if (cmd.includes("status")) {
+        speak("Systems nominal.");
+    }
+    else if (cmd.includes("time")) {
+        speak("Current time is " + new Date().toLocaleTimeString());
+    }
+    else {
+        speak("Command not recognized");
+    }
+}
+</script>
+
+</body>
+</html>        padding:20px;
         margin:15px 0;
         border-radius:8px;
     }
