@@ -1,104 +1,104 @@
-// ===============================
-// ORVIX Voice Engine (Combined)
-// ===============================
+// ================================
+// ORVIX VOICE ENGINE
+// ================================
 
-// -------- Elements (expect these in index.html) --------
-const startBtn = document.getElementById("startVoice");
-const stopBtn = document.getElementById("stopVoice");
-const output = document.getElementById("voiceOutput");
-
-// -------- Speech Recognition Setup --------
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
-let recognition = null;
-
-if (SpeechRecognition) {
-  recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.continuous = true;
-  recognition.interimResults = false;
-}
-
-// -------- Speech Synthesis --------
+// ---------- Speech Synthesis ----------
 function speak(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 1;
-  utter.pitch = 1.1;
-  utter.volume = 1;
-  speechSynthesis.speak(utter);
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    window.speechSynthesis.speak(utter);
 }
 
-// -------- Command Brain --------
-// This is your expandable Orvix mind stub
-function processCommand(command) {
-  command = command.toLowerCase();
 
-  if (command.includes("hello")) {
-    speak("Greetings. Orvix online.");
-    return "Orvix greeted you";
-  }
+// ---------- Local AI Response ----------
+async function respond(input) {
 
-  if (command.includes("time")) {
-    const t = new Date().toLocaleTimeString();
-    speak("Current time is " + t);
-    return "Time requested";
-  }
+    try {
 
-  if (command.includes("open github")) {
-    window.open("https://github.com", "_blank");
-    speak("Opening GitHub");
-    return "Opening GitHub";
-  }
+        const res = await fetch("http://localhost:3000/ask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ prompt: input })
+        });
 
-  if (command.includes("status")) {
-    speak("All systems nominal.");
-    return "Status check complete";
-  }
+        const data = await res.json();
 
-  // Default fallback
-  speak("Command received: " + command);
-  return "Unknown command";
+        const reply = data.reply || "No response from AI";
+
+        // Save memory
+        if (typeof saveMemory === "function") {
+            saveMemory({
+                input: input,
+                reply: reply,
+                time: new Date().toISOString()
+            });
+        }
+
+        speak(reply);
+
+    } catch (err) {
+
+        console.error("AI connection error:", err);
+        speak("Local AI connection failed");
+
+    }
 }
 
-// -------- Recognition Events --------
-if (recognition) {
 
-  recognition.onresult = (event) => {
-    const transcript =
-      event.results[event.results.length - 1][0].transcript;
+// ---------- Speech Recognition ----------
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-    output.textContent = "You said: " + transcript;
+const recognition = new SpeechRecognition();
 
-    const response = processCommand(transcript);
-    console.log("Orvix:", response);
-  };
+recognition.lang = "en-US";
+recognition.continuous = false;
+recognition.interimResults = false;
 
-  recognition.onerror = (e) => {
-    console.error("Voice error:", e.error);
-  };
+recognition.onresult = (event) => {
 
-}
+    const text = event.results[0][0].transcript;
 
-// -------- Button Hooks --------
-if (startBtn && recognition) {
-  startBtn.onclick = () => {
-    recognition.start();
-    speak("Voice interface activated.");
-  };
-}
+    console.log("User said:", text);
 
-if (stopBtn && recognition) {
-  stopBtn.onclick = () => {
-    recognition.stop();
-    speak("Voice interface offline.");
-  };
-}
+    respond(text);
+};
 
-// -------- Compatibility Message --------
-if (!SpeechRecognition) {
-  if (output) {
-    output.textContent =
-      "Speech Recognition not supported in this browser. Use Chrome.";
-  }
-}
+recognition.onerror = (event) => {
+    console.error("Speech error:", event.error);
+};
+
+
+// ---------- Button Trigger ----------
+document.getElementById("listenBtn")
+    .addEventListener("click", () => {
+
+        recognition.start();
+
+});
+
+
+// ---------- Startup Greeting ----------
+window.onload = () => {
+
+    if (typeof lastInteraction === "function") {
+
+        const last = lastInteraction();
+
+        if (last) {
+            speak("Welcome back. Orvix memory active.");
+        } else {
+            speak("Orvix system online.");
+        }
+    } else {
+        speak("Orvix system online.");
+    }
+
+};
