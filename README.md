@@ -1,74 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orvix AI</title>
+    <title>Orvix AI</title><style>
+    body {
+        margin:0;
+        font-family: Arial, Helvetica, sans-serif;
+        background:#0b0f18;
+        color:#e4ecff;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #0b0f18;
-            color: #e4ecff;
-        }
+    header {
+        background:#111827;
+        padding:20px;
+        text-align:center;
+        font-size:28px;
+        font-weight:bold;
+        letter-spacing:2px;
+    }
 
-        header {
-            background: #111827;
-            padding: 20px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+    section {
+        padding:40px;
+        max-width:900px;
+        margin:auto;
+    }
 
-        section {
-            padding: 40px;
-            max-width: 900px;
-            margin: auto;
-        }
+    h2 {
+        color:#6aa9ff;
+    }
 
-        h2 {
-            color: #6aa9ff;
-        }
+    .card {
+        background:#141b2d;
+        padding:20px;
+        margin:15px 0;
+        border-radius:8px;
+    }
 
-        .card {
-            background: #141b2d;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 8px;
-        }
+    button {
+        padding:15px 25px;
+        margin:10px 5px;
+        border:none;
+        border-radius:6px;
+        font-size:16px;
+        cursor:pointer;
+    }
 
-        .launch-btn {
-            display: block;
-            margin: 30px auto;
-            padding: 15px 30px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            cursor: pointer;
-        }
+    .launch-btn {
+        background:#2563eb;
+        color:white;
+    }
 
-        .launch-btn:hover {
-            background: #1d4ed8;
-        }
+    .voice-btn {
+        background:#16a34a;
+        color:white;
+    }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #111827;
-            font-size: 14px;
-        }
-    </style>
-</head>
+    footer {
+        text-align:center;
+        padding:20px;
+        background:#111827;
+        font-size:14px;
+    }
+</style>
 
-<body>
-
-<header>
+</head><body><header>
     ORVIX AI SYSTEM
-</header>
+</header><section><div class="card">
+    <h2>Project Overview</h2>
+    <p>
+        Orvix is an experimental modular AI platform designed to evolve from
+        software interaction to hardware control. This web interface acts as
+        the first communication layer for monitoring and interaction.
+    </p>
+</div>
+
+<div class="card">
+    <h2>Capabilities (Current)</h2>
+    <ul>
+        <li>Web deployment</li>
+        <li>Voice interaction shell</li>
+        <li>Expandable cognition modules</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>Controls</h2>
+    <button class="launch-btn" onclick="launchOrvix()">Launch Interface</button>
+    <button class="voice-btn" onclick="startListening()">Talk to Orvix</button>
+</div>
+
+</section><footer>
+    Orvix AI — Experimental Development Platform
+</footer><script>
+function launchOrvix(){
+    alert("Interface expansion module coming next stage.");
+}
+</script><script src="js/voice.js"></script></body>
+</html></header>
 
 <section>
 
@@ -118,4 +146,6 @@ function launchOrvix(){
 </script>
 
 </body>
+<button onclick="startListening()">Talk to Orvix</button>
+<script src="js/voice.js"></script>
 </html>
